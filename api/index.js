@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-
-// Create an instance of Express
 const app = express();
 
-// Use cors middleware
 app.use(cors());
+app.use(express.json());
 
 app.post('/register', (req, res) => {
-    res.json('test ok');
+    const { username, password } = req.body;
+    res.json({ requestData: { username, password } });
+
 });
 
 app.listen(4000);
