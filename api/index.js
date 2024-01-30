@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { default: mongoose } = require('mongoose');
-const User = require('./models/User')
+const mongoose = require('mongoose');
+const User = require('./models/User');
 const app = express();
 
 app.use(cors());
@@ -11,7 +11,7 @@ mongoose.connect('mongodb+srv://JoshEnd:S2WVkRDVFPt1SlZo@cluster0.wqrxsmn.mongod
 
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    const userDoc = User.create({ username, password });
+    const userDoc = await User.create({ username, password });
     res.json(userDoc);
 
 });
