@@ -1,13 +1,18 @@
 const express = require('express');
 const cors = require('cors');
+const { default: mongoose } = require('mongoose');
+const User = require('./models/User')
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.post('/register', (req, res) => {
+mongoose.connect('mongodb+srv://JoshEnd:S2WVkRDVFPt1SlZo@cluster0.wqrxsmn.mongodb.net');
+
+app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    res.json({ requestData: { username, password } });
+    const userDoc = User.create({ username, password });
+    res.json(userDoc);
 
 });
 
