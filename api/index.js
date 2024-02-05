@@ -71,15 +71,32 @@ app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
     const newPath = path + '.' + extension;
     fs.renameSync(path, newPath);
 
+    const { token } = req.cookies;
+    jwt.verify(token, secret, {}, async (err, info) => {
+        if (err) throw err;
+        res.json(info);
+    });
+
     const { title, summary, content } = req.body;
     const postDoc = await Post.create({
         title,
         summary,
         content,
         cover: newPath,
+        author: info.id,
     });
 
     res.json({ postDoc });
 });
+
+app.get('/posts', async (req, res) => {
+    const posts = (await Post.find()
+        .populate('author', [username])
+        .sort({ createdAt: -1 })
+        .limit(10)
+    );
+    res.json(posts);
+});
+
 
 app.listen(4000);
